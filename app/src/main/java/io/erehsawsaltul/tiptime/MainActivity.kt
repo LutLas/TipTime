@@ -1,12 +1,13 @@
 package io.erehsawsaltul.tiptime
 
 
-import android.content.res.ColorStateList
+import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent.KEYCODE_ENTER
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import io.erehsawsaltul.tiptime.databinding.ActivityMainBinding
-import java.security.AccessController.getContext
 import java.text.NumberFormat
 import java.util.*
 
@@ -21,6 +22,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.calculateButton.setOnClickListener{
             calculateTip()
+        }
+        binding.costOfServiceEditText.setOnKeyListener {
+                view, keyCode, _ -> handleKeyEvent(view, keyCode)
+
         }
 
     }
@@ -56,5 +61,18 @@ class MainActivity : AppCompatActivity() {
 
         //Toast.makeText(this, "${binding.tipResult.text}", Toast.LENGTH_SHORT).show()
         //binding.costOfService.setText("")
+    }
+
+    private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
+        if (keyCode == KEYCODE_ENTER) {
+            // Hide the keyboard
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            //calculate
+            calculateTip()
+            return true
+        }
+        return false
     }
 }
